@@ -17,11 +17,11 @@ export default function Order() {
   });
 
 
-  const baseURL=import.meta.env.VITE_API_BASE_URL
+  
 
   const handlePlaceOrder = async () => {
     try {
-      const res = await fetch(`baseURL/api/order/place`, {
+      const res = await fetch('http://localhost:10000/api/order/place', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
