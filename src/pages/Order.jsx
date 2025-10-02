@@ -16,12 +16,16 @@ export default function Order() {
     maximumFractionDigits: 2,
   });
 
+ const API = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL ,
+    // || "http://localhost:10000"
+  });
 
   
 
   const handlePlaceOrder = async () => {
     try {
-      const res = await fetch('http://localhost:10000/api/order/place', {
+      const res = await API.post('/api/order/place', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

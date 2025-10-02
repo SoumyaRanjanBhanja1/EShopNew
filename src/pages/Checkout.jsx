@@ -36,7 +36,11 @@ export default function Checkout() {
   }, []);
 
 
-  
+  const API = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL ,
+    // || "http://localhost:10000"
+  });
+
 
   const createOrderAndPay = async () => {
     if (total < 1) {
@@ -45,7 +49,7 @@ export default function Checkout() {
     }
 
     try {
-      const res = await fetch('http://localhost:10000/api/payment/create-order', {
+      const res = await API.post('/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total }),
