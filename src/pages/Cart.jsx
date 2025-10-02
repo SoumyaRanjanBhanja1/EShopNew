@@ -75,7 +75,7 @@ export default function Cart() {
                   />
                   <div className="flex-1 sm:ml-6 mt-4 sm:mt-0 text-left">
                     <h2 className="text-xl font-semibold text-white">{item.name}</h2>
-                    <p className="text-indigo-300 font-medium">₹{item.price}</p>
+                    <p className="text-indigo-300 font-medium">${item.price}</p>
                     <input
                       type="number"
                       value={item.quantity}

@@ -35,6 +35,9 @@ export default function Checkout() {
     }
   }, []);
 
+
+  const baseURL=import.meta.env.VITE_API_BASE_URL
+
   const createOrderAndPay = async () => {
     if (total < 1) {
       alert('Cart total must be at least ₹1 to proceed.');
@@ -42,7 +45,7 @@ export default function Checkout() {
     }
 
     try {
-      const res = await fetch('http://localhost:10000/api/payment/create-order', {
+      const res = await fetch(`baseURL/api/payment/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total }),
@@ -143,7 +146,7 @@ export default function Checkout() {
         </motion.h1>
 
         <div className="text-center text-lg text-gray-700 mb-2">
-          Total Amount: <span className="font-semibold text-green-600">₹{paidAmount?.toLocaleString('en-IN')}</span>
+          Total Amount: <span className="font-semibold text-green-600">${paidAmount?.toLocaleString('en-IN')}</span>
         </div>
 
         {loading && (
@@ -168,7 +171,7 @@ export default function Checkout() {
             <p className="text-sm text-gray-600 mt-1">
               Thank you for your order, Soumya!<br />
               <span className="text-indigo-600 font-medium">
-                Amount Paid: ₹{paidAmount?.toLocaleString('en-IN')}
+                Amount Paid: ${paidAmount?.toLocaleString('en-IN')}
               </span>
             </p>
             <button

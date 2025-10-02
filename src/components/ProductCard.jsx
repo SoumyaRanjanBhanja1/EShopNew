@@ -27,9 +27,9 @@ export default function ProductCard({ product, onAdd }) {
 
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-baseline gap-2">
-          <span className="text-green-400 font-bold text-lg">₹{product.price}</span>
+          <span className="text-green-400 font-bold text-lg">${product.price}</span>
           {product.mrp && product.mrp > product.price && (
-            <span className="text-indigo-300 text-sm line-through">₹{product.mrp}</span>
+            <span className="text-indigo-300 text-sm line-through">${product.mrp}</span>
           )}
         </div>
         <motion.button

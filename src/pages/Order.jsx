@@ -16,9 +16,12 @@ export default function Order() {
     maximumFractionDigits: 2,
   });
 
+
+  const baseURL=import.meta.env.VITE_API_BASE_URL
+
   const handlePlaceOrder = async () => {
     try {
-      const res = await fetch('http://localhost:10000/api/order/place', {
+      const res = await fetch(`baseURL/api/order/place`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -102,11 +105,11 @@ export default function Order() {
                     {item.name} × {item.quantity}
                   </p>
                   <p className="text-indigo-300 text-sm">
-                    ₹{item.price.toLocaleString('en-IN')} each
+                    ${item.price.toLocaleString('en-IN')} each
                   </p>
                 </div>
                 <div className="text-green-400 font-semibold">
-                  ₹{(item.price * item.quantity).toLocaleString('en-IN')}
+                  ${(item.price * item.quantity).toLocaleString('en-IN')}
                 </div>
               </li>
             ))}
@@ -121,7 +124,7 @@ export default function Order() {
               transition={{ duration: 0.4 }}
               className="mt-6 text-right text-xl font-bold text-white"
             >
-              Total: <span className="text-green-400">₹{formattedTotal}</span>
+              Total: <span className="text-green-400">${formattedTotal}</span>
             </motion.div>
 
             <motion.button

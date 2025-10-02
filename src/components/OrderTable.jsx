@@ -4,7 +4,7 @@ export default function OrderTable({ orders }) {
       {orders.map(order => (
         <div key={order._id} className="bg-white/10 p-4 rounded-lg shadow border border-white/20">
           <p><strong>User:</strong> {order.userId?.name} ({order.userId?.email})</p>
-          <p><strong>Total:</strong> ₹{order.total.toLocaleString('en-IN')}</p>
+          <p><strong>Total:</strong> ${order.total.toLocaleString('en-IN')}</p>
           <p><strong>Status:</strong> {order.status}</p>
           <p><strong>Items:</strong></p>
           <ul className="list-disc ml-6 text-sm text-indigo-200">
