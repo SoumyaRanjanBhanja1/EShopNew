@@ -21,6 +21,7 @@ export default function Home() {
   const { items, loading, error } = useSelector(state => state.products);
   const products = Array.isArray(items) ? items : [];
 
+  // Filter + sort states
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 50000]);
@@ -36,6 +37,7 @@ export default function Home() {
     navigate('/login');
   };
 
+  // Unique categories & brands
   const categories = useMemo(
     () => [...new Set(products.map(p => p.category).filter(Boolean))],
     [products]
@@ -45,6 +47,7 @@ export default function Home() {
     [products]
   );
 
+  // Filter + sort
   const filteredProducts = useMemo(() => {
     let list = products.filter(p => {
       const matchCategory = selectedCategories.length ? selectedCategories.includes(p.category) : true;
@@ -84,20 +87,20 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 text-white">
+    <>
       {/* Hero Carousel */}
-      <div className="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500">
-        <Carousel />
+      <div className="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 mb-[-40px]">
+        <Carousel className="ml-[-40px] mr-[-40px]" />
       </div>
 
-      {/* Main Content */}
-      <motion.main
+      {/* Main Section */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="flex-1 px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto w-full"
+        className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 text-white px-4 sm:px-6 lg:px-8 py-8"
       >
-        <div className="grid ml-[-10px] grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl ml-[-20px] mt-[10px] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <FilterSidebar
             categories={categories}
@@ -115,88 +118,40 @@ export default function Home() {
             onClearAll={clearAllFilters}
           />
 
-          {/* Products Section */}
-          <div className="lg:col-span-3 space-y-10">
-            {/* Category Slider */}
-            {categories.length > 0 && (
-              <div>
-                <h2 className="text-xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-400 to-purple-400">
-                  🔖 Shop by Category
-                </h2>
-                <Swiper
-                  modules={[Autoplay, Navigation]}
-                  spaceBetween={16}
-                  slidesPerView={3}
-                  navigation
-                  autoplay={{ delay: 2500, disableOnInteraction: false }}
-                  breakpoints={{
-                    640: { slidesPerView: 4 },
-                    1024: { slidesPerView: 6 },
-                  }}
-                >
-                  {categories.map((cat, idx) => (
-                    <SwiperSlide key={idx}>
-                      <div
-                        onClick={() => setSelectedCategories([cat])}
-                        className="cursor-pointer bg-white/10 hover:bg-white/20 transition rounded-lg p-4 text-center shadow-md"
-                      >
-                        <span className="block text-lg font-semibold">{cat}</span>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            )}
+          {/* Products */}
+          <div className="lg:col-span-3">
+            <motion.h1
+              initial={{ y: -12, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="text-3xl ml-[280px] sm:text-4xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"
+            >
+              🛍️ Products
+            </motion.h1>
 
-            {/* Featured Products */}
-            {!loading && filteredProducts.length > 0 && (
-              <div>
-                <h2 className="text-xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-blue-400 to-purple-400">
-                  🌟 Featured Products
-                </h2>
-                <Swiper
-                  modules={[Autoplay, Pagination, Navigation]}
-                  spaceBetween={24}
-                  slidesPerView={1}
-                  pagination={{ clickable: true }}
-                  navigation
-                  autoplay={{ delay: 3500, disableOnInteraction: false }}
-                  breakpoints={{
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                  }}
-                  className="pb-10"
-                >
-                  {filteredProducts.slice(0, 6).map(product => (
-                    <SwiperSlide key={product._id}>
-                      <ProductCard
-                        product={product}
-                        onAdd={() => handleAddToCart(product)}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            )}
-
-            {/* All Products Grid */}
-            {!loading && filteredProducts.length > 0 && (
-              <div>
-                <h2 className="text-xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-400 to-indigo-400">
-                  📦 All Products
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pb-16">
-                  {filteredProducts.map(product => (
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                      onAdd={() => handleAddToCart(product)}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Active filters badges */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selectedCategories.map(c => (
+                <span key={c} className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-sm">
+                  {c}
+                </span>
+              ))}
+              {selectedBrands.map(b => (
+                <span key={b} className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-sm">
+                  {b}
+                </span>
+              ))}
+              {(priceRange[0] !== 0 || priceRange[1] !== 50000) && (
+                <span className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-sm">
+                  ₹{priceRange[0]} - ₹{priceRange[1]}
+                </span>
+              )}
+              {searchQuery && (
+                <span className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-sm">
+                  “{searchQuery}”
+                </span>
+              )}
+            </div>
 
             {/* States */}
             {error && (
@@ -210,13 +165,42 @@ export default function Home() {
             {!loading && filteredProducts.length === 0 && (
               <p className="text-center text-red-400 text-lg">No products match your filters.</p>
             )}
+
+            {/* Product Carousel */}
+            {!loading && filteredProducts.length > 0 && (
+              <Swiper
+                modules={[Autoplay, Pagination, Navigation]}
+                spaceBetween={24}
+                slidesPerView={1}
+                pagination={{ clickable: true }}
+                navigation
+                autoplay={{ delay: 3500, disableOnInteraction: false }}
+                breakpoints={{
+                  640: { slidesPerView: 1 },
+                  768: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                }}
+                className="pb-10"
+              >
+                {filteredProducts.map(product => (
+                  <SwiperSlide key={product._id}>
+                    <ProductCard
+                      product={product}
+                      onAdd={() => handleAddToCart(product)}
+                    />
+                 </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
           </div>
         </div>
-      </motion.main>
+      </motion.div>
 
       {/* Floating Cart + Footer */}
-      <FloatingCart />
-      <Footer />
-    </div>
+      <div className="mt-[-60px]">
+        <FloatingCart />
+        <Footer />
+      </div>
+    </>
   );
 }

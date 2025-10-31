@@ -7,12 +7,15 @@ import Navbar from "./components/Navbar";
 // import Signup from "./pages/Signup1";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import AboutUs from "./components/AboutUs";
+import Careers from "./components/Careers";
 import Cart from "./pages/Cart";
 import Order from "./pages/Order";
 import Checkout from "./pages/Checkout";
 import UserOrders from "./pages/UserOrders"; // ✅ User order history
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import ProtectedUserRoute from "./components/ProtectedUserRoute";
+import InvestorsPage from "./components/InvestorsPage";
 
 function App() {
   return (
@@ -37,6 +40,11 @@ function App() {
               </ProtectedUserRoute>
             }
           />
+
+          <Route path="/About" element={<AboutUs/>}/>
+          <Route path="/apply" element={<Careers/>}/>
+          <Route path="/Investors" element={<InvestorsPage/>}/>
+          <Route path="/Careers" element={<Careers/>}/>
 
           {/* 📦 Order Summary Page */}
           <Route

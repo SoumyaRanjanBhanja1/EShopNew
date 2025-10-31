@@ -6,19 +6,32 @@ import {
   updateProduct,
   deleteProduct,
 } from "../features/products/productSlice";
+import {
+  fetchOrders,
+  updateOrder,
+  deleteOrder,
+} from "../features/orders/orderSlice";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import DashboardChart from "../components/DashboardChart";
 import ProductFormModal from "../components/ProductFormModal";
 import ProductTable from "../components/ProductTable";
+import OrderTable from "../components/OrderTable";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 export default function Admin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, loading } = useSelector((state) => state.products);
 
+  // Redux state
+  const { items: products = [], loading: productLoading } = useSelector(
+    (state) => state.products || {}
+  );
+  const { items: orders = [], loading: orderLoading } = useSelector(
+    (state) => state.orders || {}
+  );
+
+  // Local state
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -33,8 +46,10 @@ export default function Admin() {
 
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchOrders());
   }, [dispatch]);
 
+  // ---------- PRODUCT HANDLERS ----------
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
@@ -65,7 +80,7 @@ export default function Admin() {
       setShowModal(false);
       dispatch(fetchProducts());
     } catch {
-      console.error("❌ Operation failed");
+      console.error("❌ Product operation failed");
     }
   };
 
@@ -87,6 +102,18 @@ export default function Admin() {
     dispatch(fetchProducts());
   };
 
+  // ---------- ORDER HANDLERS ----------
+  const handleOrderUpdate = async (order, updates) => {
+    await dispatch(updateOrder({ id: order._id, data: updates }));
+    dispatch(fetchOrders());
+  };
+
+  const handleOrderDelete = async (id) => {
+    await dispatch(deleteOrder(id));
+    dispatch(fetchOrders());
+  };
+
+  // ---------- LOGOUT ----------
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -98,6 +125,7 @@ export default function Admin() {
       <Sidebar setActive={setActiveTab} />
 
       <div className="flex-1 p-6 md:ml-64">
+        {/* Logout */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -112,6 +140,7 @@ export default function Admin() {
           </button>
         </motion.div>
 
+        {/* Tabs */}
         <AnimatePresence mode="wait">
           {activeTab === "dashboard" && (
             <motion.div
@@ -121,7 +150,7 @@ export default function Admin() {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4 }}
             >
-              <DashboardChart items={items} />
+              <DashboardChart items={products} orders={orders} />
             </motion.div>
           )}
 
@@ -151,12 +180,33 @@ export default function Admin() {
               exit={{ opacity: 0, x: 30 }}
               transition={{ duration: 0.4 }}
             >
-              <ProductTable items={items} handleEdit={handleEdit} handleDelete={handleDelete} />
+              <ProductTable
+                items={products}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+            </motion.div>
+          )}
+
+          {activeTab === "orders" && (
+            <motion.div
+              key="orders"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 30 }}
+              transition={{ duration: 0.4 }}
+            >
+              <OrderTable
+                items={orders}
+                handleUpdate={handleOrderUpdate}
+                handleDelete={handleOrderDelete}
+              />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
+      {/* Product Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -175,7 +225,13 @@ export default function Admin() {
               close={() => {
                 setShowModal(false);
                 setEditId(null);
-                setForm({ name: "", description: "", price: "", quantity: "", image: null });
+                setForm({
+                  name: "",
+                  description: "",
+                  price: "",
+                  quantity: "",
+                  image: null,
+                });
                 setPreview(null);
               }}
               preview={preview}

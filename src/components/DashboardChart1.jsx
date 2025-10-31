@@ -10,12 +10,9 @@ import {
   ArcElement,
   LineElement,
   PointElement,
-  Filler, // ✅ Required for fill: true
 } from "chart.js";
 import { Bar, Pie, Line } from "react-chartjs-2";
-import ChartBlock from "./ChartBlock";
 
-// ✅ Register all required plugins
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,14 +22,14 @@ ChartJS.register(
   Legend,
   ArcElement,
   LineElement,
-  PointElement,
-  Filler
+  PointElement
 );
 
 export default function DashboardChart({ items = [], orders = [] }) {
   const [range, setRange] = useState("30");
   const [customRange, setCustomRange] = useState({ from: "", to: "" });
 
+  // --- Filter orders by date range ---
   const now = new Date();
   let filteredOrders = orders;
 
@@ -40,7 +37,9 @@ export default function DashboardChart({ items = [], orders = [] }) {
     if (range === "7" || range === "30") {
       const cutoff = new Date();
       cutoff.setDate(now.getDate() - parseInt(range));
-      filteredOrders = orders.filter((o) => new Date(o.createdAt) >= cutoff);
+      filteredOrders = orders.filter(
+        (o) => new Date(o.createdAt) >= cutoff
+      );
     } else if (range === "custom" && customRange.from && customRange.to) {
       const fromDate = new Date(customRange.from);
       const toDate = new Date(customRange.to);
@@ -49,10 +48,6 @@ export default function DashboardChart({ items = [], orders = [] }) {
         return d >= fromDate && d <= toDate;
       });
     }
-  }
-
-  if (!filteredOrders.length) {
-    return <p className="text-center text-white">No orders found for selected range.</p>;
   }
 
   // --- Revenue by day ---
@@ -73,14 +68,10 @@ export default function DashboardChart({ items = [], orders = [] }) {
         data: Object.values(revenueByDay),
         borderColor: "#4ade80",
         backgroundColor: "rgba(74, 222, 128, 0.3)",
-        fill: true, // ✅ Requires Filler plugin
-        tension: 0.4,
-        pointRadius: 3,
+        fill: true,
       },
     ],
   };
-
-  const totalRevenue = Object.values(revenueByDay).reduce((sum, val) => sum + val, 0);
 
   // --- Orders by status ---
   const statusCounts = filteredOrders.reduce((acc, o) => {
@@ -136,7 +127,7 @@ export default function DashboardChart({ items = [], orders = [] }) {
   const topProducts = Object.entries(productStats)
     .map(([name, stats]) => ({ name, ...stats }))
     .sort((a, b) => b.revenue - a.revenue)
-    .slice(0, 5);
+    .slice(0, 5); // Top 5
 
   const topProductsData = {
     labels: topProducts.map((p) => p.name),
@@ -194,23 +185,28 @@ export default function DashboardChart({ items = [], orders = [] }) {
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ChartBlock title="📈 Revenue by Day">
-          <Line data={revenueData} options={{ responsive: true }} />
-          <p className="text-sm text-white mt-2">
-            Total Revenue: ₹{totalRevenue.toLocaleString()}
-          </p>
-        </ChartBlock>
+        {/* Revenue Trend */}
+        <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg">
+          <h2 className="text-lg font-semibold mb-2">📈 Revenue by Day</h2>
+          <Line data={revenueData} />
+        </div>
 
-        <ChartBlock title="🛒 Orders by Status">
-          <Bar data={statusData} options={{ responsive: true }} />
-        </ChartBlock>
+        {/* Orders by Status */}
+        <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg">
+          <h2 className="text-lg font-semibold mb-2">🛒 Orders by Status</h2>
+          <Bar data={statusData} />
+        </div>
 
-        <ChartBlock title="💳 Payment Breakdown">
-          <Pie data={paymentData} options={{ responsive: true }} />
-        </ChartBlock>
+        {/* Payment Breakdown */}
+        <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg">
+          <h2 className="text-lg font-semibold mb-2">💳 Payment Breakdown</h2>
+          <Pie data={paymentData} />
+        </div>
 
-        <ChartBlock title="🏆 Top Products">
-          <Bar data={topProductsData} options={{ responsive: true }} />
+        {/* Top Products Leaderboard */}
+        <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg md:col-span-2">
+          <h2 className="text-lg font-semibold mb-2">🏆 Top Products</h2>
+          <Bar data={topProductsData} />
           <ul className="mt-4 space-y-1 text-sm text-gray-300">
             {topProducts.map((p, idx) => (
               <li key={idx}>
@@ -218,7 +214,7 @@ export default function DashboardChart({ items = [], orders = [] }) {
               </li>
             ))}
           </ul>
-        </ChartBlock>
+        </div>
       </div>
     </div>
   );

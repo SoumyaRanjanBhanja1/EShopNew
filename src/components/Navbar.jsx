@@ -17,7 +17,7 @@ export default function Navbar() {
         to="/"
         className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"
       >
-        eShop
+        SmartShop
       </Link>
 
       {/* Desktop Menu */}
