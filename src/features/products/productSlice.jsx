@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { API_BASE_URL } from "../config"; 
 
 export const fetchProducts = createAsyncThunk('products/fetch', async () => {
   const res = await axios.get('/api/products');
@@ -9,7 +10,7 @@ export const fetchProducts = createAsyncThunk('products/fetch', async () => {
 export const fetchProductsByName = createAsyncThunk(
   'products/search',
   async (name) => {
-    const res = await axios.get(`VITE_API_BASE_URL/api/products/search?name=${name}`);
+    const res = await axios.get(`${ API_BASE_URL } /api/products/search?name=${name}`);
     return await res.json();
   }
 );
