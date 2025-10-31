@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 export default function AddressForm() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function AddressForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:10000/api/user/address", {
+      const res = await fetch("${ API_BASE_URL }/api/user/address", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // 🔑 send cookie
