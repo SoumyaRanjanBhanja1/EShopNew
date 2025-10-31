@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const API = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:10000",
+    baseURL: import.meta.env.VITE_API_BASE_URL || "https://eshopnew-server-4.onrender.com",
   });
 
   const handleChange = (e) => {
