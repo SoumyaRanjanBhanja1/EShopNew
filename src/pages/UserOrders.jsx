@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from "../config";
+
+
 
 export default function UserOrders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:10000/api/user/orders', {
+    fetch('${API_BASE_URL}/api/user/orders', {
       credentials: 'include',
     })
       .then(res => res.json())
