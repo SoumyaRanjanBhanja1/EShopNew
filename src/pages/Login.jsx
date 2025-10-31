@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import {API_BASE_URL} from "../config";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -10,7 +11,8 @@ export default function Login() {
   const navigate = useNavigate();
 
   const API = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "https://eshopnew-server-4.onrender.com",
+     baseURL: API_BASE_URL,
+     withCredentials: true, 
   });
 
   const handleChange = (e) => {
