@@ -9,7 +9,7 @@ export const fetchProducts = createAsyncThunk('products/fetch', async () => {
 export const fetchProductsByName = createAsyncThunk(
   'products/search',
   async (name) => {
-    const res = await axios.get(`http://localhost:10000/api/products/search?name=${name}`);
+    const res = await axios.get(`VITE_API_BASE_URL/api/products/search?name=${name}`);
     return await res.json();
   }
 );
