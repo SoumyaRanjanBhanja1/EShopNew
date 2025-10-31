@@ -2,6 +2,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../features/cart/cartSlice';
 import { motion } from 'framer-motion';
+import { API_BASE_URL } from "../config";
+
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -44,7 +46,7 @@ export default function Checkout() {
     }
 
     try {
-      const res = await fetch('http://localhost:10000/api/payment/create-order', {
+      const res = await fetch('${ API_BASE_URL }/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total }),
@@ -79,7 +81,7 @@ export default function Checkout() {
       order_id: orderId,
       handler: async function (response) {
         try {
-          const verifyRes = await fetch('http://localhost:10000/api/payment/verify-payment', {
+          const verifyRes = await fetch('${ API_BASE_URL }/api/payment/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
