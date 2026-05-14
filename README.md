@@ -89,8 +89,6 @@ Checkout Flow: Cart finalized -> Backend creates Razorpay order -> Frontend open
 🔮 Future Enhancements
 AI-based product recommendation engine.
 
-Advanced analytics dashboard for store admins.
-
 Multi-language and multi-currency support.
 
 
