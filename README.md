@@ -31,7 +31,7 @@ Run the application:
 npm run dev
 
 # Start frontend
-npm run client
+npm run dev
 
 
 🏗️ Architecture & Workflow
@@ -75,10 +75,10 @@ Run the application:
 Bash
 # From the root directory (if using concurrently), or separately:
 # Start backend
-npm run server
+npm run dev
 
 # Start frontend
-npm run client
+npm run dev
 🏗️ Architecture & Workflow
 Authentication Flow: User enters phone/email -> Backend generates OTP -> OTP validated -> JWT token issued and stored in HTTP-only cookies.
 
