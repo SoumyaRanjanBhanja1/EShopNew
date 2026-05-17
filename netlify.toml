@@ -5,6 +5,11 @@
 [build.environment]
   NODE_VERSION = "22"
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy = "otp-credentials=*"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
