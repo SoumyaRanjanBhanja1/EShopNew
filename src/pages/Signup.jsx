@@ -1,19 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Added Link
 import { motion } from "framer-motion";
 import { API_BASE_URL } from "../config";
+
+// 1. MOVED OUTSIDE: Prevents creating a new Axios instance on every keystroke/render
+const API = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true, 
+});
 
 export default function Signup() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const API = axios.create({
-     baseURL: API_BASE_URL,
-     withCredentials: true, 
-  });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,6 +24,7 @@ export default function Signup() {
     e.preventDefault();
     setError("");
     setLoading(true);
+    
     try {
       const res = await API.post("/api/auth/signup", form, {
         headers: { "Content-Type": "application/json" },
@@ -32,8 +34,15 @@ export default function Signup() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       navigate(res.data.user.role === "admin" ? "/admin" : "/order");
+      
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+      // 2. NETWORK ERROR HANDLING: Catch suspended network or sleeping server
+      if (!err.response) {
+        setError("Network error: The server might be waking up or your connection dropped. Please try again.");
+      } else {
+        // Standard server errors (e.g., email already exists)
+        setError(err.response?.data?.message || "Signup failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -84,18 +93,20 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-lg transition duration-300"
+            className="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
         <p className="text-center text-sm text-white/60 mt-6">
           Already have an account?{" "}
-          <a href="/login" className="text-indigo-300 hover:text-indigo-400">
+          {/* 3. CHANGED TO <Link>: Prevents full page reload */}
+          <Link to="/login" className="text-indigo-300 hover:text-indigo-400">
             Login
-          </a>
+          </Link>
         </p>
       </motion.div>
     </div>
   );
 }
+```</Link></Link>
