@@ -14,6 +14,7 @@ import Carousel from '../components/Carousel';
 import FloatingCart from '../components/FloatingCart';
 import FilterSidebar from '../components/FilterSidebar';
 import ProductCard from '../components/ProductCard';
+import NewArrivals from '../components/NewArrivals';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -211,6 +212,9 @@ export default function Home() {
               <p className="text-center text-red-400 text-lg">No products match your filters.</p>
             )}
           </div>
+        </div>
+        <div className="mt-[40px]">
+          <NewArrivals />
         </div>
       </motion.main>
 

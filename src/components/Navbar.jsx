@@ -23,7 +23,11 @@ export default function Navbar() {
       {/* Desktop Menu */}
       <div className="hidden md:flex space-x-6 text-white font-medium">
         <Link to="/" className="hover:text-blue-400 transition duration-300">Home</Link>
-        <Link to="/admin" className="hover:text-purple-400 transition duration-300">Login</Link>
+         {/* <Link to="/admin" className="hover:text-purple-400 transition duration-300 mr-0">Account</Link> */}
+      <Link to="/admin" className="hover:text-purple-400 transition duration-300">
+  <img src="/user12.png" alt="Logo" className="w-6 h-6" />
+</Link>
+
         <Link to="/orders" className="hover:text-green-400 transition duration-300">Orders</Link>
         <Link to="/cart" className="hover:text-yellow-400 transition duration-300">Cart</Link>
       </div>

@@ -16,6 +16,8 @@ import UserOrders from "./pages/UserOrders"; // ✅ User order history
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import ProtectedUserRoute from "./components/ProtectedUserRoute";
 import InvestorsPage from "./components/InvestorsPage";
+import LegalPage from "./components/LegalPage";
+import NewArrivals from './components/NewArrivals';
 
 function App() {
   return (
@@ -45,6 +47,8 @@ function App() {
           <Route path="/apply" element={<Careers/>}/>
           <Route path="/Investors" element={<InvestorsPage/>}/>
           <Route path="/Careers" element={<Careers/>}/>
+          <Route path="/help" element={<LegalPage title="Help & Concierge Center" />} />
+          <Route path="/NewArrivals" element={<NewArrivals />} />
 
           {/* 📦 Order Summary Page */}
           <Route
