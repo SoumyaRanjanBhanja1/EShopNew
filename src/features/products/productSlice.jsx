@@ -1,32 +1,36 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { API_BASE_URL } from "../config"; 
+// FIX 1: Go up two directories to reach the src folder
+import { API_BASE_URL } from "../../config"; 
 
 export const fetchProducts = createAsyncThunk('products/fetch', async () => {
-  const res = await axios.get('/api/products');
+  // FIX 2: Added API_BASE_URL to all axios calls
+  const res = await axios.get(`${API_BASE_URL}/api/products`);
   return res.data;
 });
 
 export const fetchProductsByName = createAsyncThunk(
   'products/search',
   async (name) => {
-    const res = await axios.get(`${ API_BASE_URL } /api/products/search?name=${name}`);
-    return await res.json();
+    // FIX 3: Removed spacing in the URL string
+    const res = await axios.get(`${API_BASE_URL}/api/products/search?name=${name}`);
+    // FIX 4: Changed res.json() to res.data because we are using Axios, not native fetch
+    return res.data;
   }
 );
 
 export const createProduct = createAsyncThunk('products/create', async (formData) => {
-  const res = await axios.post('/api/products', formData);
+  const res = await axios.post(`${API_BASE_URL}/api/products`, formData);
   return res.data;
 });
 
 export const updateProduct = createAsyncThunk('products/update', async ({ id, data }) => {
-  const res = await axios.put(`/api/products/${id}`, data);
+  const res = await axios.put(`${API_BASE_URL}/api/products/${id}`, data);
   return res.data;
 });
 
 export const deleteProduct = createAsyncThunk('products/delete', async (id) => {
-  await axios.delete(`/api/products/${id}`);
+  await axios.delete(`${API_BASE_URL}/api/products/${id}`);
   return id;
 });
 
