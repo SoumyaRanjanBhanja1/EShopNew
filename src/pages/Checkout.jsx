@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../features/cart/cartSlice';
+<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -14,6 +15,11 @@ import {
 
 // Register GSAP Plugin
 gsap.registerPlugin(useGSAP);
+=======
+import { motion } from 'framer-motion';
+import { API_BASE_URL } from "../config";
+
+>>>>>>> b0554f35e4fc19a9d253647b6245fa15ef4c70e4
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -95,7 +101,7 @@ export default function Checkout() {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:10000/api/payment/create-order', {
+      const res = await fetch('${ API_BASE_URL }/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total }),
@@ -133,7 +139,7 @@ export default function Checkout() {
       order_id: orderId,
       handler: async function (response) {
         try {
-          const verifyRes = await fetch('http://localhost:10000/api/payment/verify-payment', {
+          const verifyRes = await fetch('${ API_BASE_URL }/api/payment/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

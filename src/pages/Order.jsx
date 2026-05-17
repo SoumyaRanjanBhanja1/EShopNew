@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
+import {API_BASE_URL} from "../config"
+
 
 export default function Order() {
   const cartItems = useSelector(state => state.cart.items);
@@ -21,7 +23,7 @@ export default function Order() {
 
   const handlePlaceOrder = async () => {
     try {
-      const res = await fetch('http://localhost:10000/api/order/place', {
+      const res = await fetch('${API_BASE_URL}/api/order/place', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
