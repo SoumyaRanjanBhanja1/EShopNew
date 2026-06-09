@@ -23,7 +23,7 @@ export default function Order() {
 
   const handlePlaceOrder = async () => {
     try {
-      const res = await fetch('${API_BASE_URL}/api/order/place', {
+      const res = await fetch(`${API_BASE_URL}/api/order/place`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
